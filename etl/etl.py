@@ -238,7 +238,7 @@ def load_data(df):
     }
 
     try:
-        frame = df.to_sql('pgcb-test', engine, if_exists="append", index=False, dtype=data_type)
+        frame = df.to_sql('pgcb', engine, if_exists="append", index=False, dtype=data_type)
     except ValueError as vx:
         print(vx)
     except Exception as ex:  
