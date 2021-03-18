@@ -244,7 +244,7 @@ def load_data(df):
     except Exception as ex:  
         print(ex)
     else:
-        print("PostgreSQL Table {} has been created successfully.".format("pgcb_test"))
+        print("PostgreSQL Table {} has been created successfully.".format("pgcb"))
 
 # Main Function
 if __name__ == "__main__":
