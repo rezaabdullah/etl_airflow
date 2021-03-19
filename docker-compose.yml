@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  db:
+  postgres:
     image: postgres
     restart: always
     environment:
@@ -15,22 +15,24 @@ services:
         condition: on-failure
     depends_on:
       - postgres
+    env_file:
+      - .env
     volumes:
-      - pgcb-data:/var/lib/postgresql/data
-    # networks:
-    #   - postgresql
-  etl:
-    build: ./etl/
-    # restart: always
-    command: python3 ./etl/etl.py
-    depends_on:
-      - db
-    # networks:
-    #   - postgresql
-
-volumes:
-  pgcb-data:
-
-# networks:
-#   postgresql:
-#     driver: bridge
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+    webserver:
+      image: apache/airflow
+      entrypoint: ./scripts/entrypoint.sh
+      restart_policy:
+        condition: on-failure
+      depends_on:
+        - postgres
+        - scheduler
+      env_file:
+        - .env
+      volumes:
+        - ./dags:/opt/airflow/dags
+        - ./logs:/opt/airflow/logs
+        - ./scripts:/opt/airflow/scripts
+      ports:
+        - "8080:8080"
