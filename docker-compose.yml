@@ -8,6 +8,13 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
+    scheduler:
+      image: apache/airflow
+      command: scheduler
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - postgres
     volumes:
       - pgcb-data:/var/lib/postgresql/data
     # networks:
