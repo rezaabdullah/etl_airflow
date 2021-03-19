@@ -1,38 +1,34 @@
 version: "3.8"
-
 services:
   postgres:
     image: postgres
-    restart: always
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
-    scheduler:
-      image: apache/airflow
-      command: scheduler
-      restart_policy:
-        condition: on-failure
+        - POSTGRES_USER=airflow
+        - POSTGRES_PASSWORD=airflow
+        - POSTGRES_DB=airflow
+  scheduler:
+    image: apache/airflow
+    command: scheduler
+    restart: on-failure
     depends_on:
-      - postgres
+        - postgres
     env_file:
-      - .env
+        - .env
     volumes:
-      - ./dags:/opt/airflow/dags
-      - ./logs:/opt/airflow/logs
-    webserver:
-      image: apache/airflow
-      entrypoint: ./scripts/entrypoint.sh
-      restart_policy:
-        condition: on-failure
-      depends_on:
+        - ./dags:/opt/airflow/dags
+        - ./logs:/opt/airflow/logs
+  webserver:
+    image: apache/airflow
+    entrypoint: ./scripts/entrypoint.sh
+    restart: on-failure
+    depends_on:
         - postgres
         - scheduler
-      env_file:
+    env_file:
         - .env
-      volumes:
+    volumes:
         - ./dags:/opt/airflow/dags
         - ./logs:/opt/airflow/logs
         - ./scripts:/opt/airflow/scripts
-      ports:
+    ports:
         - "8080:8080"
