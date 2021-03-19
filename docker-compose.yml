@@ -3,32 +3,32 @@ services:
   postgres:
     image: postgres
     environment:
-        - POSTGRES_USER=airflow
-        - POSTGRES_PASSWORD=airflow
-        - POSTGRES_DB=airflow
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
   scheduler:
     image: apache/airflow
     command: scheduler
     restart: on-failure
     depends_on:
-        - postgres
+      - postgres
     env_file:
-        - .env
+      - .env
     volumes:
-        - ./dags:/opt/airflow/dags
-        - ./logs:/opt/airflow/logs
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
   webserver:
     image: apache/airflow
     entrypoint: ./scripts/entrypoint.sh
     restart: on-failure
     depends_on:
-        - postgres
-        - scheduler
+      - postgres
+      - scheduler
     env_file:
-        - .env
+      - .env
     volumes:
-        - ./dags:/opt/airflow/dags
-        - ./logs:/opt/airflow/logs
-        - ./scripts:/opt/airflow/scripts
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./scripts:/opt/airflow/scripts
     ports:
-        - "8080:8080"
+      - "8080:8080"
