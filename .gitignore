@@ -1,3 +1,5 @@
 venv
 .vscode
 test
+logs
+dags/__pycache__
