@@ -32,10 +32,3 @@ services:
       - ./scripts:/opt/airflow/scripts
     ports:
       - "8080:8080"
-  etl:
-    build: ./etl/
-    # restart: always
-    # command: python3 ./etl/etl.py
-    depends_on:
-      - postgres
-      - scheduler
