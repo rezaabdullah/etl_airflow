@@ -216,7 +216,7 @@ def load_data(df):
 
     # Create the engine to connect to the PostgreSQL database
     # engine = create_engine("postgres+psycopg2://postgres:postgres@localhost/postgres", echo=True)
-    engine = create_engine("postgres+psycopg2://postgres:postgres@db:5432/postgres", echo=True)
+    engine = create_engine("postgres+psycopg2://postgres:postgres@postgres:5432/postgres", echo=True)
 
     # Schema
     data_type = {
