@@ -246,8 +246,7 @@ def load_data(df):
     else:
         print("PostgreSQL Table {} has been created successfully.".format("pgcb"))
 
-# Main Function
-if __name__ == "__main__":
+def main():
     # Check the status of the download operation
     if Path(LOG_PATH).exists():
         with open(LOG_PATH, "r") as file:
@@ -282,3 +281,7 @@ if __name__ == "__main__":
     # Create state.json for troubleshooting
     with open(LOG_PATH, "w") as status_file:
         json.dump(log, status_file, indent = 4)
+
+# Main Function
+if __name__ == "__main__":
+    main()
