@@ -1,5 +1,5 @@
 import datetime as dt
-from .. import etl
+import etl
 
 # The DAG object; we'll need this to instantiate a DAG
 from airflow import DAG
