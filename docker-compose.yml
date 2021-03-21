@@ -19,7 +19,6 @@ services:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./requirements.txt:/opt/airflow/requirements.txt
-      - ./logs/url_list.json:/opt/airflow/logs/url_list.json
   webserver:
     image: apache/airflow
     entrypoint: ./scripts/entrypoint.sh
