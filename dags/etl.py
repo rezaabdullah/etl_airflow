@@ -29,6 +29,7 @@ import wget
 # Libraries to transform data
 import numpy as np
 import pandas as pd
+import openpyxl
 
 # Libraries to load data
 # import sqlite3
@@ -40,7 +41,7 @@ from sqlalchemy.types import Integer, Text, Float, Date
 # Initialization & constants
 TARGET_URL = "http://pgcb.gov.bd/site/page/0dd38e19-7c70-4582-95ba-078fccb609a8/-"
 # DOWNLOAD_DIR = "../excel_files"
-LOG_PATH = "etl/state.json"
+LOG_PATH = "state.json"
 
 # Function to get file URLs
 def extract_files(page_url, last_url):
@@ -134,7 +135,7 @@ def transform_data(url):
     """
 
     # Read file
-    df = pd.read_excel(url, sheet_name = "Forecast")
+    df = pd.read_excel(url, sheet_name = "Forecast", engine="openpyxl")
 
     # Rename columns for easier handling
     df.columns = range(df.shape[1])
