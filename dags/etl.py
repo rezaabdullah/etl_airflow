@@ -44,7 +44,8 @@ TARGET_URL = "http://pgcb.gov.bd/site/page/0dd38e19-7c70-4582-95ba-078fccb609a8/
 LOG_PATH = "state.json"
 
 # Function to get file URLs
-def extract_files(page_url, last_url):
+# def extract_files(page_url, last_url):
+def extract_files():
     """
     This function gets the list of links for the files that are needed to be 
     downloaded from a webpage.
@@ -65,7 +66,7 @@ def extract_files(page_url, last_url):
     
     try:
         # Retrieve webpage HTML code
-        response = requests.get(page_url)
+        response = requests.get("http://pgcb.gov.bd/site/page/0dd38e19-7c70-4582-95ba-078fccb609a8/-")
         response.raise_for_status()
         
         # Parse the webpage HTML code
@@ -88,41 +89,45 @@ def extract_files(page_url, last_url):
             url = link.get("href")
             url = url.strip()
             new_url.append(url)
-        
-        # Check if last_url is empty
-        if not last_url:
-            # Download files
-            for url in new_url:
-                try:
-                    print("\nExtracting:", url)
-                    # wget.download(url, DOWNLOAD_DIR)
-                    # df = pd.read_excel(url, sheet_name = "Forecast")
-                    transform_data(url)
-                    last_url.append(url)
-                except Exception as e:
-                    print(e)
-        else:
-            # Find new files
-            new_url = list(set(new_url) - set(last_url))
-            for url in new_url:
-                try:
-                    print("\nExtracting:", url)
-                    # wget.download(url, DOWNLOAD_DIR)
-                    transform_data(url)
-                    last_url.insert(0, url)
-                    last_url.pop()    
-                except Exception as e:
-                    print(e)
+        # # Check if last_url is empty
+        # if not last_url:
+        #     # Download files
+        #     for url in new_url:
+        #         try:
+        #             print("\nExtracting:", url)
+        #             # wget.download(url, DOWNLOAD_DIR)
+        #             # df = pd.read_excel(url, sheet_name = "Forecast")
+        #             transform_data(url)
+        #             last_url.append(url)
+        #         except Exception as e:
+        #             print(e)
+        # else:
+        #     # Find new files
+        #     new_url = list(set(new_url) - set(last_url))
+        #     for url in new_url:
+        #         try:
+        #             print("\nExtracting:", url)
+        #             # wget.download(url, DOWNLOAD_DIR)
+        #             transform_data(url)
+        #             last_url.insert(0, url)
+        #             last_url.pop()    
+        #         except Exception as e:
+        #             print(e)
 
         # return the url_list and completion message
         new_url = last_url
         msg = "Success: File URLs retrieved."
-        return new_url, msg
+        log_data = {
+            "last_operation" : datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
+            "url_list" : new_url,
+            "completion_status" : message
+        }
+        with open("/opt/airflow/logs/url_list.json", "w") as status_file:
+            json.dump(log_data, status_file, indent = 4)
     except requests.exceptions.RequestException as e:
         print(e)
         msg = str(e)
         new_url = []
-        return msg
     finally:
         return new_url, msg
 

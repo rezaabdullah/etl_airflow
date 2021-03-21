@@ -17,7 +17,7 @@ default_args = {
     "email_on_retry": False,
     "retries": 1,
     "retry_delay": dt.timedelta(minutes=5),
-    "start_date": dt.datetime(2016, 1, 1)
+    "start_date": dt.datetime(2021, 3, 19)
     # 'queue': 'bash_queue',
     # 'pool': 'backfill',
     # 'priority_weight': 10,
@@ -38,11 +38,12 @@ default_args = {
 dag = DAG(
     "pgcb_etl",
     default_args=default_args,
-    schedule_interval="@hourly"
+    schedule_interval="@daily",
+    catchup=False
 )
 
 etl_task = PythonOperator(
     task_id = "PGCB_ETL",
-    python_callable=etl.main,
+    python_callable=etl.extract_files,
     dag=dag
 )
