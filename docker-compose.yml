@@ -8,7 +8,8 @@ services:
       - POSTGRES_DB=postgres
   scheduler:
     image: apache/airflow
-    command: scheduler
+    # command: scheduler
+    command: bash -c "pip install -r requirements.txt && airflow scheduler"
     restart: on-failure
     depends_on:
       - postgres
