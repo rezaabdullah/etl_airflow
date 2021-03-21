@@ -19,6 +19,7 @@ Date    : 20/01/2021
 
 # Libraries to extract files
 import requests
+# from bs4 import BeautifulSoup
 from bs4 import BeautifulSoup
 from pathlib import Path
 from datetime import datetime
