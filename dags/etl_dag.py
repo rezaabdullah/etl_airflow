@@ -17,7 +17,7 @@ default_args = {
     "email_on_retry": False,
     "retries": 1,
     "retry_delay": dt.timedelta(minutes=5),
-    "start_date": datetime(2016, 1, 1)
+    "start_date": dt.datetime(2016, 1, 1)
     # 'queue': 'bash_queue',
     # 'pool': 'backfill',
     # 'priority_weight': 10,
