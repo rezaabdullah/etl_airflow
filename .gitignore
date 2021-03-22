@@ -1,6 +1,7 @@
 venv
 .vscode
 test
-logs
+logs/*
 dags/__pycache__
 dags/etl_original.py
+etl
