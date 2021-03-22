@@ -40,10 +40,7 @@ def extract_files(TARGET_URL, URL_LIST):
     :return msg: function completion message
     :rtype msg: string
     """
-
-    # Current URL list
-    new_url = []
-
+    
     # Check the status of the download operation
     if Path(URL_LIST).exists():
         with open(URL_LIST, "r") as file:
