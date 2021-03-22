@@ -71,8 +71,16 @@ dag = DAG(
 #     dag=dag
 # )
 
-extract_url = BashOperator(
+extract = BashOperator(
     task_id = "extract_urls",
     bash_command="python /opt/airflow/dags/extract_urls.py",
     dag=dag
 )
+
+transform = BashOperator(
+    task_id = "transform_data",
+    bash_command="python /opt/airflow/dags/transform_data.py",
+    dag=dag
+)
+
+extract >> transform
