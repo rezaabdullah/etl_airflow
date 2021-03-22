@@ -6,7 +6,30 @@ from airflow import DAG
 
 # Operators; we need this to operate!
 from airflow.operators.python import PythonOperator
+from airflow.operators.bash import BashOperator
 from airflow.utils.dates import days_ago
+
+# # Libraries to extract files
+# import requests
+# # from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
+# from pathlib import Path
+# from datetime import datetime
+# import json
+# import wget
+
+# # Libraries to transform data
+# import numpy as np
+# import pandas as pd
+# import openpyxl
+
+# # Libraries to load data
+# # import sqlite3
+# # from sqlite3 import Error
+# import psycopg2
+# from sqlalchemy import create_engine
+# from sqlalchemy.types import Integer, Text, Float, Date
+
 # These args will get passed on to each operator
 # You can override them on a per-task basis during operator initialization
 default_args = {
@@ -17,7 +40,7 @@ default_args = {
     "email_on_retry": False,
     "retries": 1,
     "retry_delay": dt.timedelta(minutes=5),
-    "start_date": dt.datetime(2021, 3, 19)
+    "start_date": dt.datetime(2021, 3, 21)
     # 'queue': 'bash_queue',
     # 'pool': 'backfill',
     # 'priority_weight': 10,
@@ -42,8 +65,14 @@ dag = DAG(
     catchup=False
 )
 
-etl_task = PythonOperator(
-    task_id = "PGCB_ETL",
-    python_callable=etl.extract_files,
+# etl_task = PythonOperator(
+#     task_id = "PGCB_ETL",
+#     python_callable=etl.extract_files,
+#     dag=dag
+# )
+
+extract_url = BashOperator(
+    task_id = "extract_urls",
+    bash_command="python /opt/airflow/dags/extract_urls.py",
     dag=dag
 )
