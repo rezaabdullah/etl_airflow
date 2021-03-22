@@ -4,4 +4,5 @@ test
 logs/*
 dags/__pycache__
 dags/etl_original.py
+dags/etl.py
 etl
