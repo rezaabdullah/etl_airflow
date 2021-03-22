@@ -65,21 +65,15 @@ dag = DAG(
     catchup=False
 )
 
-# etl_task = PythonOperator(
-#     task_id = "PGCB_ETL",
-#     python_callable=etl.extract_files,
-#     dag=dag
-# )
-
 extract = BashOperator(
     task_id = "extract_urls",
     bash_command="python /opt/airflow/dags/extract_urls.py",
     dag=dag
 )
 
-transform = BashOperator(
-    task_id = "transform_data",
-    bash_command="python /opt/airflow/dags/transform_data.py",
+transform_load = BashOperator(
+    task_id = "transform_load",
+    bash_command="python /opt/airflow/dags/transform_load.py",
     dag=dag
 )
 
