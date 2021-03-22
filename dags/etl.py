@@ -41,21 +41,19 @@ from sqlalchemy.types import Integer, Text, Float, Date
 # Initialization & constants
 TARGET_URL = "http://pgcb.gov.bd/site/page/0dd38e19-7c70-4582-95ba-078fccb609a8/-"
 # DOWNLOAD_DIR = "../excel_files"
-LOG_PATH = "state.json"
+LOG_PATH = "/opt/airflow/logs/url_list.json"
 
 # Function to get file URLs
-# def extract_files(page_url, last_url):
-def extract_files():
+def extract_files(TARGET_URL, LOG_PATH):
+# def extract_files():
     """
     This function gets the list of links for the files that are needed to be 
     downloaded from a webpage.
-    :param page_url: webpage url
-    :param last_url: list of file URLs from previous run
-    :type page_url: string
-    :type last_url: list
-    :return new_url: list of links of downloadable files
+    :param TARGET_URL: webpage url
+    :param LOG_PATH: directory where log file of last downloaded URLs
+    :type TARGET_URL: string
+    :type LOG_PATH: list
     :return msg: function completion message
-    :rtype new_url: list
     :rtype msg: string
     """
 
@@ -63,10 +61,10 @@ def extract_files():
     new_url = []
     # Function completion message
     msg = ""
-    
+
     try:
         # Retrieve webpage HTML code
-        response = requests.get("http://pgcb.gov.bd/site/page/0dd38e19-7c70-4582-95ba-078fccb609a8/-")
+        response = requests.get(TARGET_URL)
         response.raise_for_status()
         
         # Parse the webpage HTML code
@@ -89,41 +87,14 @@ def extract_files():
             url = link.get("href")
             url = url.strip()
             new_url.append(url)
-        # # Check if last_url is empty
-        # if not last_url:
-        #     # Download files
-        #     for url in new_url:
-        #         try:
-        #             print("\nExtracting:", url)
-        #             # wget.download(url, DOWNLOAD_DIR)
-        #             # df = pd.read_excel(url, sheet_name = "Forecast")
-        #             transform_data(url)
-        #             last_url.append(url)
-        #         except Exception as e:
-        #             print(e)
-        # else:
-        #     # Find new files
-        #     new_url = list(set(new_url) - set(last_url))
-        #     for url in new_url:
-        #         try:
-        #             print("\nExtracting:", url)
-        #             # wget.download(url, DOWNLOAD_DIR)
-        #             transform_data(url)
-        #             last_url.insert(0, url)
-        #             last_url.pop()    
-        #         except Exception as e:
-        #             print(e)
-
-        # return the url_list and completion message
-        new_url = last_url
-        msg = "Success: File URLs retrieved."
-        log_data = {
+        log = {
             "last_operation" : datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
-            "url_list" : new_url,
+            "last_url" : new_url,
+            "all_files" : all_files,
             "completion_status" : message
         }
-        with open("/opt/airflow/logs/url_list.json", "w") as status_file:
-            json.dump(log_data, status_file, indent = 4)
+        with open("/opt/airflow/logs/url_list.json", "w") as log_file:
+            json.dump(log, log_file, indent = 4)
     except requests.exceptions.RequestException as e:
         print(e)
         msg = str(e)
@@ -265,7 +236,7 @@ def main():
         all_files = []
     
     # Get the list of URLs for CSV files
-    new_url, message = extract_files(TARGET_URL, last_url)
+    new_url, message = extract_files(TARGET_URL, LOG_PATH)
 
     # # Transform and load data to local database
     # for filename in Path(DOWNLOAD_DIR).glob("*.xlsm"):
@@ -278,16 +249,16 @@ def main():
     #         all_files.append(filename.stem)
             
     # Status of the download operation
-    log = {
-        "last_operation" : datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
-        "last_url" : new_url,
-        "all_files" : all_files,
-        "completion_status" : message
-    }
+    # log = {
+    #     "last_operation" : datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
+    #     "last_url" : new_url,
+    #     "all_files" : all_files,
+    #     "completion_status" : message
+    # }
     
-    # Create state.json for troubleshooting
-    with open(LOG_PATH, "w") as status_file:
-        json.dump(log, status_file, indent = 4)
+    # # Create state.json for troubleshooting
+    # with open(LOG_PATH, "w") as status_file:
+    #     json.dump(log, status_file, indent = 4)
 
 # Main Function
 if __name__ == "__main__":
