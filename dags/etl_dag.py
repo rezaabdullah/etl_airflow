@@ -76,4 +76,5 @@ transform_load = BashOperator(
     dag=dag
 )
 
+# Set dependency of each task
 extract >> transform_load
