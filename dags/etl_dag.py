@@ -1,5 +1,4 @@
 import datetime as dt
-import etl
 
 # The DAG object; we'll need this to instantiate a DAG
 from airflow import DAG
@@ -77,4 +76,4 @@ transform_load = BashOperator(
     dag=dag
 )
 
-extract >> transform
+extract >> transform_load
