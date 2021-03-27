@@ -8,27 +8,6 @@ from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
 from airflow.utils.dates import days_ago
 
-# # Libraries to extract files
-# import requests
-# # from bs4 import BeautifulSoup
-# from bs4 import BeautifulSoup
-# from pathlib import Path
-# from datetime import datetime
-# import json
-# import wget
-
-# # Libraries to transform data
-# import numpy as np
-# import pandas as pd
-# import openpyxl
-
-# # Libraries to load data
-# # import sqlite3
-# # from sqlite3 import Error
-# import psycopg2
-# from sqlalchemy import create_engine
-# from sqlalchemy.types import Integer, Text, Float, Date
-
 # These args will get passed on to each operator
 # You can override them on a per-task basis during operator initialization
 default_args = {
